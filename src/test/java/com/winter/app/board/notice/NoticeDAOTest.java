@@ -6,11 +6,27 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.winter.app.board.BoardVO;
+
+import lombok.extern.slf4j.Slf4j;
+
 @SpringBootTest
+@Slf4j
 class NoticeDAOTest {
 
 	@Autowired
 	private NoticeDAO noticeDAO;
+	
+	@Test
+	void detailTest()throws Exception{
+		NoticeVO noticeVO = new NoticeVO();
+		noticeVO.setBoardNum(9L);
+		BoardVO boardVO = noticeDAO.detail(noticeVO);
+		log.info("result : {}", boardVO);
+		
+		//단정문
+		assertNotNull(boardVO);
+	}
 	
 //	@Test
 //	void insertTest()throws Exception {
@@ -21,7 +37,7 @@ class NoticeDAOTest {
 //		int result = noticeDAO.insert(noticeVO);
 //		
 //		//단정문
-//		assertEquals(0, result);
+//		assertEquals(1, result);
 //		
 //		
 //	}
@@ -40,16 +56,16 @@ class NoticeDAOTest {
 //		
 //	}
 	
-	@Test
-	void deleteTest()throws Exception {
-		NoticeVO noticeVO = new NoticeVO();
-		noticeVO.setBoardNum(Long.valueOf("7"));
-		int result = noticeDAO.delete(noticeVO);
-		
-		//단정문 지운 개수가 1이면 성공뜸
-		assertEquals(1, result);
-		
-		
-	}
+//	@Test
+//	void deleteTest()throws Exception {
+//		NoticeVO noticeVO = new NoticeVO();
+//		noticeVO.setBoardNum(Long.valueOf("8"));
+//		int result = noticeDAO.delete(noticeVO);
+//		
+//		//단정문 지운 개수가 1이면 성공뜸
+//		assertEquals(1, result);
+//		
+//		
+//	}
 
 }
