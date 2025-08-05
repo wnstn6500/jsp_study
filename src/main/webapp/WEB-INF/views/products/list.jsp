@@ -17,7 +17,34 @@
 			<div id="content">
 				<c:import url="/WEB-INF/views/include/topbar.jsp"></c:import>
 				<div class="container-fluid">
-					<!-- page contents 내용 -->
+					<h1>Product list</h1>
+					<div class="row col-md-8 offset-md-2">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>Num</th>
+									<th>Title</th>
+									<th>RATE</th>
+									<th>DATE</th>
+								</tr>
+							</thead>
+							<tbody>
+							<c:forEach items="${list}" var="vo">
+								<tr>
+									<td>${vo.productNum}</td>
+									<td><a href="./detail?productNum=${vo.productNum}">${vo.productName}</a></td>
+									<td>${vo.productRate}</td>
+									<td>${vo.productDate}</td>
+								</tr>
+							</c:forEach>
+							</tbody>
+						</table>
+						
+						<div>
+							<a href="./add" class="btn btn-outline-success">상품등록</a>
+						</div>
+						
+					</div>
 				</div>
 			</div>
 			<!-- End Content -->
