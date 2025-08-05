@@ -6,7 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<c:import url="/WEB-INF/views/include/head_css.jsp"></c:import>
+<%@ include file ="/WEB-INF/views/include/head_css.jsp" %>
 </head>
 <body id="page-top">
 	<div id="wrapper">
@@ -18,13 +18,13 @@
 				<c:import url="/WEB-INF/views/include/topbar.jsp"></c:import>
 				<div class="container-fluid">
 					<!-- page contents 내용 -->
-					<h1>Detail page</h1>
-					<h3>${result.boardTitle}</h3>
-					<h3>${result.boardContents}</h3>
+					<h1>${board} Detail page</h1>
+					<h3>${vo.boardTitle}</h3>
+					<h3>${vo.boardContents}</h3>
 					
 					<div>
 						<form id="frm">
-							<input type="hidden" name="boardNum" value="${result.boardNum}">
+							<input type="hidden" name="boardNum" value="${vo.boardNum}">
 						</form>
 						
 						<button class="btn btn-outline-success action" data-kind="u">Update</button>

@@ -1,30 +1,23 @@
-/**
- * 
- */
-
-console.log("detail")
-
-const actions1 = document.getElementsByClassName("action");
-const actions2 = document.querySelectorAll(".action");
-const frm = document.querySelector("#frm")
-
-//for(초기식;조건식;증감식)
-//for(a of actions1)
-//for in 
-//foreach
-
-for(a of actions1){
-	a.addEventListener("click", function(e){
-		let k = e.target;
-		let kind = k.getAttribute("data-kind");
-		
-		if(kind=='d'){
-			frm.setAttribute("method", "POST");
-			frm.setAttribute("action","./delete")
-			frm.submit();	
-		}else{
-			frm.setAttribute("action","./update")
-			frm.submit();
+const elements = document.querySelectorAll('.action');
+const form = document.querySelector('#frm');
+elements.forEach(el => {
+	el.addEventListener('click', () => {
+		const data = el.getAttribute('data-kind');
+		if (data === 'd') {
+			const proceed = window.confirm('Proceed Delete?');
+			if (proceed) {
+				form.setAttribute('action', './delete');
+				form.setAttribute('method', 'post');
+				form.submit();				
+			}
+		} else if (data === 'u'){
+			form.setAttribute('action', './update');
+			form.setAttribute('method', 'get');
+			form.submit();						
+		} else if (data === 'r') {
+			form.setAttribute('method', 'get');
+			form.setAttribute('action', './reply');
+			form.submit();
 		}
 	});
-} 
+});

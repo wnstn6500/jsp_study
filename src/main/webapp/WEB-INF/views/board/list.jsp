@@ -6,7 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<c:import url="/WEB-INF/views/include/head_css.jsp"></c:import>
+<%@ include file="/WEB-INF/views/include/head_css.jsp" %>
 </head>
 <body id="page-top">
 	<div id="wrapper">
@@ -18,12 +18,12 @@
 				<c:import url="/WEB-INF/views/include/topbar.jsp"></c:import>
 				<div class="container-fluid">
 					<!-- page contents 내용 -->
-					<h1>Notice</h1>
 					<div class="row col-md-8 offset-md-2">
+						<h2>${board}</h2>
 						<table class="table table-striped">
 							<thead>
 								<tr>
-									<th>No</th>
+									<th>Num</th>
 									<th>Title</th>
 									<th>Writer</th>
 									<th>Date</th>
@@ -35,7 +35,9 @@
 								<tr>
 									<td>${vo.boardNum}</td>
 									<td>
+									<c:catch>
 									<c:forEach begin="1" end="${vo.boardDepth}">--</c:forEach>
+									</c:catch>
 									<a href="./detail?boardNum=${vo.boardNum}">${vo.boardTitle}</a></td>
 									<td>${vo.boardWriter}</td>
 									<td>${vo.boardDate}</td>

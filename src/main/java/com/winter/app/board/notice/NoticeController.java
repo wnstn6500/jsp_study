@@ -13,41 +13,45 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.winter.app.board.BoardVO;
 
-
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping(value="/notice/*")
 public class NoticeController {
 
 	@Autowired
-	private NoticeDAO noticeService;
+	private NoticeService noticeService;
 	
 	@Value("${board.notice}")
 	private String name;
 	
 	@ModelAttribute("board")
 	public String getBoard() {
-		return "name";
+		return name;
+	}
+	
+	@GetMapping("list")
+	public String list(Model model)throws Exception{
+		//
+		List<BoardVO> list = noticeService.list();
+		
+		model.addAttribute("list", list);
+		
+		return "board/list";
 	}
 	
 	@GetMapping("detail")
 	public String detail(NoticeVO noticeVO, Model model)throws Exception{
+//		String n=request.getParameter("boardNum");
+//		int num = Integer.parseInt(n);
+//		NoticeVO noticeVO = new NoticeVO();
+//		noticeVO.setBoardNum(num);
 		
-		BoardVO result = noticeService.detail(noticeVO);
+		BoardVO boardVO = noticeService.detail(noticeVO);
 		
-		model.addAttribute("result",result);
+		model.addAttribute("vo", boardVO);
 		
 		return "board/detail";
-	}
-	
-	@GetMapping("list")
-	public String list(Model model)throws Exception {
-		// model => request랑 생명주기가 비슷함
-		List<BoardVO> list = noticeService.list();
-		
-		
-		
-		return "board/list";
 	}
 	
 	@GetMapping("add")
@@ -80,7 +84,7 @@ public class NoticeController {
 			msg="수정 성공";
 		}
 		
-		String url = "./detail?boardNum="+noticeVO.getBoardNum();
+		String url="./detail?boardNum="+noticeVO.getBoardNum();
 		
 		model.addAttribute("msg", msg);
 		model.addAttribute("url", url);
@@ -99,10 +103,12 @@ public class NoticeController {
 		
 		String url="./list";
 		
-		model.addAttribute("msg",msg);
-		model.addAttribute("url",url);
-		
+		model.addAttribute("msg", msg);
+		model.addAttribute("url", url);
 		
 		return "commons/result";
+		
 	}
+	
+	
 }

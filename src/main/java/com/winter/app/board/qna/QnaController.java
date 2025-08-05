@@ -5,23 +5,29 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/qna/*")
 public class QnaController {
-
+	
 	@Autowired
 	private QnaService qnaService;
 	
 	@Value("${board.qna}")
 	private String name;
 	
+	@ModelAttribute("board")
+	public String getBoard() {
+		return name;
+	}
+	
 	@GetMapping("list")
-	public String list(Model model) throws Exception{
+	public String list(Model model)throws Exception{
 		
-		model.addAttribute("list",qnaService.list());
+		model.addAttribute("list", qnaService.list());
 		
 		return "board/list";
 	}
@@ -29,14 +35,14 @@ public class QnaController {
 	@GetMapping("detail")
 	public String detail(QnaVO qnaVO, Model model)throws Exception{
 		
-		model.addAttribute("result",qnaService.detail(qnaVO));
+		model.addAttribute("vo", qnaService.detail(qnaVO));
 		return "board/detail";
 	}
 	
 	@GetMapping("reply")
 	public String reply(QnaVO qnaVO, Model model)throws Exception{
-		model.addAttribute("vo",qnaVO);
-		
+		model.addAttribute("vo", qnaVO);
+		System.out.println("reply");
 		return "board/add";
 	}
 	
@@ -45,18 +51,18 @@ public class QnaController {
 		
 		int result = qnaService.reply(qnaVO);
 		
-		return "board/add";
+		return "redirect:./list";
 	}
 	
 	@GetMapping("add")
-	public String add()throws Exception{
-		
+	public String insert()throws Exception{
 		return "board/add";
 	}
 	
 	@PostMapping("add")
-	public String add(QnaVO qnaVO)throws Exception{
+	public String insert(QnaVO qnaVO)throws Exception{
 		int result = qnaService.insert(qnaVO);
 		return "redirect:./list";
 	}
+
 }

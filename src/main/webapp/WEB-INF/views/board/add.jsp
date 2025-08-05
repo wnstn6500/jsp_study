@@ -38,7 +38,7 @@
 						  <textarea class="form-control" id="contents" rows="9" name="boardContents">${vo.boardContents}</textarea>
 						</div>
 						
-						<button type="submit" class="btn btn-primary">submit</button>
+						<button type="submit" class="btn btn-primary">Submit</button>
 					</form>
 					</div>
 					</div>
