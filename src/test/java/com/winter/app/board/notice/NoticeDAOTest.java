@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.winter.app.board.BoardVO;
+import com.winter.app.commons.Pager;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,8 +20,8 @@ class NoticeDAOTest {
 	@Autowired
 	private NoticeDAO noticeDAO;
 	
-	void listTest()throws Exception{
-		List<BoardVO> result = noticeDAO.list();
+	void listTest(Pager pager)throws Exception{
+		List<BoardVO> result = noticeDAO.list(pager);
 		int testResult = result.size();
 		assertEquals(10, testResult);
 	}

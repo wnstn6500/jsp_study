@@ -23,6 +23,14 @@
 					<h3>${vo.boardContents}</h3>
 					
 					<div>
+						<h2>첨부파일</h2>
+						<h4><a href="/files/${board}/${vo.boardFileVO.saveName}">${vo.boardFileVO.oriName}</a></h4>
+						<br>
+						<h4>${vo.boardFileVO.saveName}</h4>
+					</div>
+					
+					
+					<div>
 						<form id="frm">
 							<input type="hidden" name="boardNum" value="${vo.boardNum}">
 						</form>

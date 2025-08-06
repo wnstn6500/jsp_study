@@ -20,7 +20,7 @@
 					<!-- page contents 내용 -->
 					<div class="row justify-content-center" >
 						<div class="col-md-6">
-							<form method="post">
+							<form method="post" enctype="multipart/form-data">
 								<input type="hidden" name="boardNum" value="${vo.boardNum}">
 								<div class="mb-3">
 								  <label for="writer" class="form-label">Writer</label>
@@ -37,7 +37,15 @@
 						  <label for="contents" class="form-label">Contents</label>
 						  <textarea class="form-control" id="contents" rows="9" name="boardContents">${vo.boardContents}</textarea>
 						</div>
-						
+						<div class="mb-4">
+							<label for="content">Comments</label>
+							<textarea class="form-control"
+							placeholder="write your content here!" id="content" 
+							style="height: 100px" name="boardContent">${notice.boardContent}</textarea>
+						</div>
+						<div>
+						<input type="file" name="attaches">
+						</div>
 						<button type="submit" class="btn btn-primary">Submit</button>
 					</form>
 					</div>

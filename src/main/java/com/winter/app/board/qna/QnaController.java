@@ -8,9 +8,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.winter.app.commons.Pager;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequestMapping("/qna/*")
+@Slf4j
 public class QnaController {
 	
 	@Autowired
@@ -25,9 +31,9 @@ public class QnaController {
 	}
 	
 	@GetMapping("list")
-	public String list(Model model)throws Exception{
+	public String list(Model model,Pager pager)throws Exception{
 		
-		model.addAttribute("list", qnaService.list());
+		model.addAttribute("list", qnaService.list(pager));
 		
 		return "board/list";
 	}
@@ -60,8 +66,9 @@ public class QnaController {
 	}
 	
 	@PostMapping("add")
-	public String insert(QnaVO qnaVO)throws Exception{
-		int result = qnaService.insert(qnaVO);
+	public String insert(QnaVO qnaVO, MultipartFile attaches)throws Exception{
+		log.info("{}", attaches);
+		//int result = qnaService.insert(qnaVO);
 		return "redirect:./list";
 	}
 

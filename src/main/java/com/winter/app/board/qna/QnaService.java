@@ -2,8 +2,11 @@ package com.winter.app.board.qna;
 
 import java.util.List;
 import com.winter.app.board.notice.NoticeService;
+import com.winter.app.commons.Pager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.winter.app.board.BoardService;
 import com.winter.app.board.BoardVO;
@@ -21,9 +24,11 @@ public class QnaService implements BoardService{
     }
 
 	@Override
-	public List<BoardVO> list() throws Exception {
+	public List<BoardVO> list(Pager pager) throws Exception {
 		// TODO Auto-generated method stub
-		return qnaDAO.list();
+		
+		
+		return qnaDAO.list(pager);
 	}
 
 	@Override
@@ -45,7 +50,7 @@ public class QnaService implements BoardService{
 	}
 
 	@Override
-	public int insert(BoardVO boardVO) throws Exception {
+	public int insert(BoardVO boardVO,MultipartFile attaches) throws Exception {
 		// TODO Auto-generated method stub
 		int result = qnaDAO.insert(boardVO);
 		//ref값을 update
@@ -64,6 +69,7 @@ public class QnaService implements BoardService{
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
 	
 	
 }
