@@ -10,6 +10,11 @@ import org.springframework.web.multipart.MultipartFile;
 @Component
 public class FileManager {
 
+	public boolean fileDelete(String dir, String fileName)throws Exception{
+		File file = new File(dir,fileName);
+		
+		return file.delete();
+	}
 	
 	public String fileSave(String dir, MultipartFile attaces)throws Exception {
 		//1. 디렉토리 생성

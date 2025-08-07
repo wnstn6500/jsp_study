@@ -18,8 +18,25 @@
 				<c:import url="/WEB-INF/views/include/topbar.jsp"></c:import>
 				<div class="container-fluid">
 					<!-- page contents 내용 -->
-					<div class="row col-md-8 offset-md-2">
+					<div class="col-md-8 offset-md-2">
 						<h2>${board}</h2>
+						
+						<div class="row">
+							<form id="serachForm">
+							<div class="input-group mb-3">
+							<input type="hidden" name="pageNum" id="pageNum">
+							<select class="form-control" name="kind" aria-label="Default select example">
+							  <option value="k1" ${pager.kind eq 'k1'?'selected':''}>Title</option>
+							  <option value="k2" ${pager.kind eq 'k2'?'selected':''}>Contents</option>
+							  <option value="k3" ${pager.kind eq 'k3'?'selected':''}>Writer</option>
+							</select>
+							  <input type="text" class="form-control" value="${pager.keyword}" name="keyword" placeholder="Recipient’s username" aria-label="Recipient’s username" aria-describedby="button-addon2">
+							  <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Button</button>
+							</div>
+							</form>	
+						</div>
+						
+						
 						<table class="table table-striped">
 							<thead>
 								<tr>
@@ -36,7 +53,7 @@
 									<td>${vo.boardNum}</td>
 									<td>
 									<c:catch>
-									<c:forEach begin="1" end="${vo.boardDepth}">--</c:forEach>
+										<c:forEach begin="1" end="${vo.boardDepth}">--</c:forEach>
 									</c:catch>
 									<a href="./detail?boardNum=${vo.boardNum}">${vo.boardTitle}</a></td>
 									<td>${vo.boardWriter}</td>
@@ -49,13 +66,17 @@
 						<div>
 							<nav aria-label="Page navigation example">
 							<ul class="pagination">
-							  <li class="page-item"><a class="page-link" href="./list?pageNum=${pager.startNum-1}">Previous</a></li>
+							  <li class="page-item"><a class="page-link pn">Previous</a></li>
 							  <c:forEach begin="${pager.startNum}" end="${pager.endNum}" var="i">
-							  <li class="page-item"><a class="page-link" href="./list?pageNum=${i}">${i}</a></li>
+							  <li class="page-item"><a class="page-link pn" data-pn="${i}">${i}</a></li>
 							  </c:forEach>
 							  <li class="page-item">
-							  	<a class="page-link" href="./list?pageNum=${pager.endNum+1}" aria-label="Next">Next</a>
+							  	<a class="page-link pn" data-pn="${pager.endNum+1}" aria-label="Next">Next</a>
+							  	
 							  </li>
+							  
+							  
+							  
 							</ul>
 							</nav>
 						</div>
@@ -73,6 +94,7 @@
 		
 	</div>
 	<c:import url="/WEB-INF/views/include/tale.jsp"></c:import>
+	<script type="text/javascript" src="/js/board/board_list.js"></script>
 	
 	
 	

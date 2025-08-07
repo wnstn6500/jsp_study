@@ -8,7 +8,7 @@ public interface BoardDAO {
 
 	public List<BoardVO> list(Pager pager)throws Exception;
 	
-	public Long totalCount()throws Exception;
+	public Long totalCount(Pager pager)throws Exception;
 	
 	// detail
 	public BoardVO detail(BoardVO boardVO)throws Exception;
@@ -24,4 +24,6 @@ public interface BoardDAO {
 	
 	//delete
 	public int delete(BoardVO boardVO) throws Exception;
+	
+	public int fileDelete(BoardVO boardVO) throws Exception;
 }

@@ -50,7 +50,7 @@ public class QnaService implements BoardService{
 	}
 
 	@Override
-	public int insert(BoardVO boardVO,MultipartFile attaches) throws Exception {
+	public int insert(BoardVO boardVO,MultipartFile[] attaches) throws Exception {
 		// TODO Auto-generated method stub
 		int result = qnaDAO.insert(boardVO);
 		//ref값을 update

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>    
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>    
 <!DOCTYPE html>
 <html>
 <head>
@@ -37,14 +38,26 @@
 						  <label for="contents" class="form-label">Contents</label>
 						  <textarea class="form-control" id="contents" rows="9" name="boardContents">${vo.boardContents}</textarea>
 						</div>
+
+						<div>
+							<button class="btn btn-primary" type="button" id="add">ADD</button>
+
+						</div>
+
 						<div class="mb-4">
 							<label for="content">Comments</label>
 							<textarea class="form-control"
 							placeholder="write your content here!" id="content" 
 							style="height: 100px" name="boardContent">${notice.boardContent}</textarea>
 						</div>
+						
 						<div>
-						<input type="file" name="attaches">
+							<c:forEach items="${vo.boardFileVOs}" var="f">
+								<button class="deleteFile" type="button">${f.oriName}</button>
+							</c:forEach>
+						</div>
+						<div id="result" data-file-count="${vo.boardFileVOs.size()}">
+						
 						</div>
 						<button type="submit" class="btn btn-primary">Submit</button>
 					</form>
@@ -59,6 +72,6 @@
 		
 	</div>
 	<c:import url="/WEB-INF/views/include/tale.jsp"></c:import>
-	
+	<script src="/js/board/board_add.js"></script>
 </body>
 </html>

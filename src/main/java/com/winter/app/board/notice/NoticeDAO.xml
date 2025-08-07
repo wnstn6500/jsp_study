@@ -11,13 +11,45 @@
   		<result column="BOARD_CONTENTS" property="boardContents"/>
   		<result column="BOARD_DATE" property="boardDate"/>
   		<result column="BOARD_HIT" property="boardHit"/>
-  		<association property="boardFileVO" javaType="BoardFileVO">
+  		<collection property="boardFileVOs" javaType="java.util.List" ofType="BoardFileVO">
   		<id column="FILE_NUM" property="fileNum"/>
   		<result column="ORI_NAME" property="oriName"/>
   		<result column="SAVE_NAME" property="saveName"/>	
-  		</association>
+  		</collection>
   		
   	</resultMap>
+
+	<sql id="search">
+		<where>
+		<choose>
+			<when test="kind='k1'">
+				BOARD_TITLE
+			</when>
+		
+			<when test="kind='k2'">
+				BOARD_CONTENTS
+			</when>
+		
+			<otherwise>
+				BOARD_WRITER
+			</otherwise>
+		
+		</choose>
+		LIKE CONCAT('%',#{keyword}, '%')
+		</where>
+	</sql>
+	
+	<select id="list" resultType="NoticeVO" parameterType="Pager">
+	  	SELECT * FROM NOTICE 
+	  	<include refid="search"></include>
+	  	ORDER BY BOARD_NUM DESC
+	  	limit #{startIndex}, #{endIndex}
+  	</select>
+
+	  <select id="totalCount" resultType="Long" parameterType="Pager">
+	  		SELECT COUNT(BOARD_NUM) FROM NOTICE
+	  		<include refid="search"></include>
+	  </select>
 
    <select id="detail" parameterType="NoticeVO" resultMap="detailResult">
    	  SELECT * FROM notice n
@@ -25,17 +57,6 @@
 	  USING(board_num)
 	  WHERE board_num = #{boardNum}
    </select>
-  
-  <select id="totalCount" resultType="Long">
-  		SELECT COUNT(BOARD_NUM) FROM NOTICE
-  </select>
-  
-  	<!-- ID는 DAO의 메서드명과 동일하게 작성 -->
-  	<select id="list" resultType="NoticeVO" parameterType="Pager">
-	  	SELECT * FROM NOTICE 
-	  	ORDER BY BOARD_NUM DESC
-	  	limit #{startIndex}, #{endIndex}
-  	</select>
   
   
   	<insert id="insert" parameterType="NoticeVO" useGeneratedKeys="true" keyProperty="boardNum">
@@ -60,4 +81,9 @@
   		DELETE FROM NOTICE 
   		WHERE BOARD_NUM = #{boardNum}
   	</delete>
+  	
+  	<delete id="fileDelete" parameterType="NoticeVO">
+  		DELETE FROM NOTICEFILES WHERE BOARD_NUM=#{boardNum}
+  	</delete>
+  	
   </mapper>
