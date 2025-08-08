@@ -52,8 +52,8 @@
 	  </select>
 
    <select id="detail" parameterType="NoticeVO" resultMap="detailResult">
-   	  SELECT * FROM notice n
-	  LEFT JOIN noticefiles nf
+   	  SELECT * FROM NOTICE n
+	  LEFT JOIN NOTICEFILES nf
 	  USING(board_num)
 	  WHERE board_num = #{boardNum}
    </select>

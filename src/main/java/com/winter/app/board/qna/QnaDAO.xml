@@ -6,6 +6,24 @@
   <!-- namespace의 이름은 사용하려는 DAO의 풀패키지명과 동일하게 작성 -->
   <mapper namespace="com.winter.app.board.qna.QnaDAO">
   
+  		<resultMap type="QnaVO" id="detailResult">
+  		<id column="BOARD_NUM" property="boardNum"/>
+  		<result column="BOARD_TITLE" property="boardTitle"/>
+  		<result column="BOARD_WRITER" property="boardWriter"/>
+  		<result column="BOARD_CONTENTS" property="boardContents"/>
+  		<result column="BOARD_DATE" property="boardDate"/>
+  		<result column="BOARD_HIT" property="boardHit"/>
+  		<result column="BOARD_REF" property="boardRef"/>
+  		<result column="BOARD_Step" property="boardStep"/>
+  		<result column="BOARD_Depth" property="boardDepth"/>
+  		<collection property="boardFileVOs" javaType="java.util.List" ofType="BoardFileVO">
+	  		<id column="FILE_NUM" property="fileNum" />
+	  		<result column="ORI_NAME" property="oriName"/>
+	  		<result column="SAVE_NAME" property="saveName"/>	
+  		</collection>
+  		
+  	</resultMap>
+  
   	<sql id="search">
   		<where>
   		 <choose>
