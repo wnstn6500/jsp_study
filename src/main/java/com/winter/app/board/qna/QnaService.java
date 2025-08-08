@@ -2,12 +2,15 @@ package com.winter.app.board.qna;
 
 import java.util.List;
 import com.winter.app.board.notice.NoticeService;
+import com.winter.app.commons.FileManager;
 import com.winter.app.commons.Pager;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.winter.app.board.BoardFileVO;
 import com.winter.app.board.BoardService;
 import com.winter.app.board.BoardVO;
 
@@ -18,6 +21,15 @@ public class QnaService implements BoardService{
 
 	@Autowired
 	private QnaDAO qnaDAO;
+	
+	@Autowired
+	private FileManager fileManager;
+	
+	@Value("${app.upload}")
+	private String upload;
+	
+	@Value("${board.qna}")
+	private String board;
 
     QnaService(NoticeService noticeService) {
         this.noticeService = noticeService;
@@ -26,7 +38,8 @@ public class QnaService implements BoardService{
 	@Override
 	public List<BoardVO> list(Pager pager) throws Exception {
 		// TODO Auto-generated method stub
-		
+		Long totalCount = qnaDAO.totalCount(pager);
+		pager.makeNum(totalCount);
 		
 		return qnaDAO.list(pager);
 	}
@@ -59,13 +72,36 @@ public class QnaService implements BoardService{
 	}
 
 	@Override
-	public int update(BoardVO boardVO) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+	public int update(BoardVO boardVO, MultipartFile [] attaches) throws Exception {
+		int result = qnaDAO.update(boardVO);
+		
+		if(attaches == null) {
+			return result;
+		}
+		
+		//1. 파일이 비어있는지 확인
+		for(MultipartFile m:attaches) {
+			if(m == null || m.isEmpty()) {
+				continue;
+			}
+			//1. File을 HDD에 저장
+			String fileName = fileManager.fileSave(upload+board, m);
+			
+			
+		}
+		
+		
+		return result;
 	}
 
 	@Override
 	public int delete(BoardVO boardVO) throws Exception {
+		int result = qnaDAO.delete(boardVO);
+		return result;
+	}
+
+	@Override
+	public int fileDelete(BoardFileVO boardFileVO) throws Exception {
 		// TODO Auto-generated method stub
 		return 0;
 	}

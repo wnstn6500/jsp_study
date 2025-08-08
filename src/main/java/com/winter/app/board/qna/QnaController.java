@@ -32,7 +32,7 @@ public class QnaController {
 	
 	@GetMapping("list")
 	public String list(Model model,Pager pager)throws Exception{
-		
+		model.addAttribute("pager",pager);
 		model.addAttribute("list", qnaService.list(pager));
 		
 		return "board/list";
@@ -48,7 +48,7 @@ public class QnaController {
 	@GetMapping("reply")
 	public String reply(QnaVO qnaVO, Model model)throws Exception{
 		model.addAttribute("vo", qnaVO);
-		System.out.println("reply");
+		
 		return "board/add";
 	}
 	
@@ -61,7 +61,9 @@ public class QnaController {
 	}
 	
 	@GetMapping("add")
-	public String insert()throws Exception{
+	public String insert(QnaVO qnaVO, MultipartFile [] attaches)throws Exception{
+		
+		int result = qnaService.insert(qnaVO, attaches);
 		return "board/add";
 	}
 	
@@ -71,5 +73,7 @@ public class QnaController {
 		//int result = qnaService.insert(qnaVO);
 		return "redirect:./list";
 	}
+	
+	
 
 }

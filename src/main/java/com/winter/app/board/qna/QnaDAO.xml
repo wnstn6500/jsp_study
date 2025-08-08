@@ -5,9 +5,37 @@
   
   <!-- namespace의 이름은 사용하려는 DAO의 풀패키지명과 동일하게 작성 -->
   <mapper namespace="com.winter.app.board.qna.QnaDAO">
-  	<select id="list" resultType="QnaVO">
+  
+  	<sql id="search">
+  		<where>
+  		 <choose>
+  		 	<when test="kind=='k1'">
+  		 		BOARD_TITLE
+  		 	</when>
+  		 	
+  		 	<when test="kind=='k2'">
+  		 		BOARD_CONTENTS
+  		 	</when>
+  		 	
+  		 	<otherwise>
+  		 		BOARD_WRITER
+  		 	</otherwise>
+  		 
+  		 </choose>
+  		 LIKE CONCAT('%',#{keyword}, '%')
+  		 </where>
+  	</sql>	
+  
+  	<select id="list" resultType="QnaVO" parameterType="Pager">
   		SELECT * FROM QNA 
+  		<include refid="search"></include>
   		ORDER BY BOARD_REF DESC, BOARD_STEP ASC
+  		limit #{startIndex}, #{endIndex}
+  	</select>
+  
+  	<select id="totalCount" resultType="Long" parameterType="Pager">
+  		SELECT COUNT(BOARD_NUM) FROM QNA
+  		<include refid="search"></include>
   	</select>
   
   
@@ -46,8 +74,8 @@
   		
   	</update>
   	
-  	<delete id="delete" parameterType="NoticeVO">
-  		DELETE FROM NOTICE WHERE BOARD_NUM=#{boardNum}
+  	<delete id="delete" parameterType="QnaVO">
+  		DELETE FROM QNA WHERE BOARD_NUM=#{boardNum}
   	</delete>
   	
   	

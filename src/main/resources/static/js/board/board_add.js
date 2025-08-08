@@ -8,17 +8,38 @@ let count = result.getAttribute('data-file-count');
 
 deleteFile.forEach((item)=>{
 	item.addEventListener("click",function(){
+		
+		let flag =confirm("정말??")
+		
+		if(!flag){
+			return;
+		}
+		
+		let fn=item.getAttribute("data-file-num")
+		console.log(fn)
+		
+		//fetch, axios
 		let params = new URLSearchParams();
-		params.append("fileNum", 2)
+		params.append("fileNum", item.getAttribute("data-file-num"))
+		console.log("시작")
 		
 		fetch(`./fileDelete`, {
 			method:"post",
 			body:params
 		})
-		.then(r=>r.json())
+		.then(r=>r.text())
 		.then(r=>{
-			console.log(r)
+			 // 텍스트로 받을땐 trim()으로 앞 뒤 공백 없애기 추천
+			if(r.trim()==1){
+				count--;
+				item.remove();
+			}else{
+				alert('삭제 실패');
+			}
 		})
+		
+		console.log("finish")
+		
 	})
 	
 	
