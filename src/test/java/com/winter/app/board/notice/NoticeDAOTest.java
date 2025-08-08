@@ -2,11 +2,14 @@ package com.winter.app.board.notice;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.winter.app.board.BoardVO;
+import com.winter.app.commons.Pager;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,6 +19,12 @@ class NoticeDAOTest {
 
 	@Autowired
 	private NoticeDAO noticeDAO;
+	
+	void listTest(Pager pager)throws Exception{
+		List<BoardVO> result = noticeDAO.list(pager);
+		int testResult = result.size();
+		assertEquals(10, testResult);
+	}
 	
 	@Test
 	void detailTest()throws Exception{
@@ -28,19 +37,24 @@ class NoticeDAOTest {
 		assertNotNull(boardVO);
 	}
 	
-//	@Test
-//	void insertTest()throws Exception {
-//		NoticeVO noticeVO = new NoticeVO();
-//		noticeVO.setBoardTitle("title3");
-//		noticeVO.setBoardContents("contents3");
-//		noticeVO.setBoardWriter("writer3");
-//		int result = noticeDAO.insert(noticeVO);
-//		
-//		//단정문
-//		assertEquals(1, result);
-//		
-//		
-//	}
+	
+	
+	@Test
+	void insertTest()throws Exception {
+		for(int i=0;i<105;i++) {
+		NoticeVO noticeVO = new NoticeVO();
+		noticeVO.setBoardTitle("title"+i);
+		noticeVO.setBoardContents("contents"+i);
+		noticeVO.setBoardWriter("writer"+i);
+		int result = noticeDAO.insert(noticeVO);
+		if(i%10==0) {
+			Thread.sleep(500);
+		}
+		//단정문
+		assertEquals(1, result);
+		
+		}
+	}
 //	@Test
 //	void updateTest()throws Exception {
 //		NoticeVO noticeVO = new NoticeVO();
