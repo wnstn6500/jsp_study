@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.winter.app.board.BoardFileVO;
 import com.winter.app.board.BoardVO;
 import com.winter.app.board.qna.QnaController;
+import com.winter.app.commons.FileManager;
 import com.winter.app.commons.Pager;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -124,6 +125,31 @@ public class NoticeController {
 	public int fileDelete(BoardFileVO boardFileVO, Model model)throws Exception{
 		int result = noticeService.fileDelete(boardFileVO);
 	
+		return result;
+	}
+	
+	
+	@GetMapping("fileDown")
+	public String fileDown(BoardFileVO boardFileVO, Model model)throws Exception{
+		boardFileVO = noticeService.fileDetail(boardFileVO);
+		model.addAttribute("vo", boardFileVO);
+		return "fileDownView";
+	}
+	@PostMapping("boardFile")
+	@ResponseBody
+	public String boardFile(MultipartFile bf)throws Exception{
+		log.info(bf.getOriginalFilename());
+		
+		
+		return noticeService.boardFile(bf);
+	}
+	
+	@PostMapping("boardFileDelete")
+	@ResponseBody
+	public boolean boardFileDelete(String fileName)throws Exception{
+		
+		boolean result = noticeService.boardFileDelete(fileName);
+		
 		return result;
 	}
 }

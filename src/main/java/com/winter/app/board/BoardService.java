@@ -21,9 +21,15 @@ public interface BoardService {
 	public int delete(BoardVO boardVO) throws Exception;
 	
 	//insert
-	int insert(BoardVO boardVO, MultipartFile[] attaches) throws Exception;
+	public int insert(BoardVO boardVO, MultipartFile[] attaches) throws Exception;
 	
 	//fileDelete
 	public int fileDelete(BoardFileVO boardFileVO)throws Exception;
 	
+	//fileDetail
+	public BoardFileVO fileDetail(BoardFileVO boardFileVO)throws Exception;
+	
+	public String boardFile(MultipartFile multipartFile) throws Exception;
+	
+	public boolean boardFileDelete(String fileName) throws Exception;
 }

@@ -8,8 +8,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.winter.app.board.BoardFileVO;
+import com.winter.app.board.notice.NoticeVO;
 import com.winter.app.commons.Pager;
 
 import lombok.extern.slf4j.Slf4j;
@@ -61,19 +64,50 @@ public class QnaController {
 	}
 	
 	@GetMapping("add")
-	public String insert(QnaVO qnaVO, MultipartFile [] attaches)throws Exception{
+	public String insert()throws Exception{
 		
-		int result = qnaService.insert(qnaVO, attaches);
 		return "board/add";
 	}
 	
 	@PostMapping("add")
-	public String insert(QnaVO qnaVO, MultipartFile attaches)throws Exception{
-		log.info("{}", attaches);
-		//int result = qnaService.insert(qnaVO);
+	public String insert(QnaVO qnaVO, MultipartFile [] attaches)throws Exception{
+		
+		int result = qnaService.insert(qnaVO, attaches);
 		return "redirect:./list";
 	}
 	
+	@PostMapping("delete")
+	public String delete(NoticeVO noticeVO, Model model)throws Exception{
+		int result = qnaService.delete(noticeVO);
+		String msg = "삭제 실패";
+		
+		if(result>0) {
+			msg="삭제 성공";
+		}
+		
+		String url="./list";
+		
+		model.addAttribute("msg",msg);
+		model.addAttribute("url",url);
+		
+		return "commons/result";
+	}
 	
+	@PostMapping("fileDelete")
+	@ResponseBody
+	public int fileDelete(BoardFileVO boardFileVO, Model model)throws Exception{
+		int result = qnaService.fileDelete(boardFileVO);
+		
+		return result;
+	}
+	
+	@GetMapping("fileDown")
+	public String fileDown(BoardFileVO boardFileVO, Model model)throws Exception{
+		boardFileVO = qnaService.fileDetail(boardFileVO);
+		
+		model.addAttribute("vo", boardFileVO);
+		
+		return "fileDownView";
+	}
 
 }

@@ -8,6 +8,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <c:import url="/WEB-INF/views/include/head_css.jsp"></c:import>
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.css" rel="stylesheet">
 </head>
 <body id="page-top">
 	<div id="wrapper">
@@ -72,6 +73,48 @@
 		
 	</div>
 	<c:import url="/WEB-INF/views/include/tale.jsp"></c:import>
+	<script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.js"></script>
 	<script src="/js/board/board_add.js"></script>
+	<script type="text/javascript">
+	$('#contents').summernote({
+		callbacks: {
+			onImageUpload: (files) => {
+				console.log("files: ", files[0]);
+				let form = new FormData();
+				form.append('bf', files[0]);
+				fetch("./boardFile", {
+					method: 'POST',
+					body: form
+				})
+				.then(r => r.text())
+				.then(r => {
+					$("#contents").summernote('editor.insertImage', r);
+				})
+				.catch(e => console.log(e));
+				
+				;
+			},
+			onMediaDelete: function(files){
+				let f = $(files[0]).attr("src"); // /files/notice/****.jpg
+				
+				let params = new URLSearchParams();
+				params.append("fileName", f);
+				fetch("./boardFileDelete", {
+					method:"POST",
+					body:params
+				})
+				.then(r=>r.json())
+				.then(r=>{
+					if(r){
+						alert('삭제 완료')
+					} else{
+						alert('失敗')
+					}
+				})
+				
+			}	
+		}
+	})
+	</script>
 </body>
 </html>
