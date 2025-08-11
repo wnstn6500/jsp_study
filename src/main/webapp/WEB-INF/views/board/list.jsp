@@ -21,6 +21,11 @@
 					<div class="col-md-8 offset-md-2">
 						<h2>${board}</h2>
 						
+						<c:if test="${ list.size() eq 0 }">
+							<h2>아무것도 없습니다...</h2>							
+						</c:if>
+						<c:if test="${ list.size() gt 0 }">
+						
 						<div class="row">
 							<form id="serachForm">
 							<div class="input-group mb-3">
@@ -80,6 +85,7 @@
 							</ul>
 							</nav>
 						</div>
+						</c:if>
 						<div>
 							<a href="./add" class="btn btn-outline-success">글쓰기</a>
 						</div>

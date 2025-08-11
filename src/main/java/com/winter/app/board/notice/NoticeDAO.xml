@@ -40,10 +40,12 @@
 	</sql>
 	
 	<select id="list" resultType="NoticeVO" parameterType="Pager">
-	  	SELECT * FROM NOTICE 
-	  	<include refid="search"></include>
-	  	ORDER BY BOARD_NUM DESC
-	  	limit #{startIndex}, #{endIndex}
+	  	SELECT * FROM NOTICE
+	  	<if test="startIndex >= 0">	  	
+		  	<include refid="search"></include>
+		  	ORDER BY BOARD_NUM DESC
+		  	limit #{startIndex}, #{endIndex}
+	  	</if> 
   	</select>
 
 	  <select id="totalCount" resultType="Long" parameterType="Pager">

@@ -45,10 +45,12 @@
   	</sql>	
   
   	<select id="list" resultType="QnaVO" parameterType="Pager">
-  		SELECT * FROM QNA 
-  		<include refid="search"></include>
-  		ORDER BY BOARD_REF DESC, BOARD_STEP ASC
-  		limit #{startIndex}, #{endIndex}
+  		SELECT * FROM QNA
+  		<if test="startIndex >= 0">  		
+	  		<include refid="search"></include>
+	  		ORDER BY BOARD_REF DESC, BOARD_STEP ASC
+	  		limit #{startIndex}, #{endIndex}
+  		</if> 
   	</select>
   
   	<select id="totalCount" resultType="Long" parameterType="Pager">
