@@ -6,23 +6,27 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<c:import url="/WEB-INF/views/include/head_css.jsp"></c:import>
+<%@ include file="/WEB-INF/views/include/head_css.jsp" %>
 </head>
 <body id="page-top">
 	<div id="wrapper">
 		<c:import url="/WEB-INF/views/include/sidebar.jsp"></c:import>
 		
-		<!-- Start -->
+		<!-- Start  -->
 		<div id="content-wrapper" class="d-flex flex-column">
 			<div id="content">
 				<c:import url="/WEB-INF/views/include/topbar.jsp"></c:import>
 				<div class="container-fluid">
 					<!-- page contents 내용 -->
 					<h1>Index </h1>
+					<c:if test="${not empty member}">
+						<h3>${member.name}</h3>
+					</c:if>
+					
 				</div>
 			</div>
-			<!-- End Content -->
-			<c:import url="/WEB-INF/views/include/footer.jsp"></c:import>	
+			<!--  End Content  -->
+			<c:import url="/WEB-INF/views/include/footer.jsp"></c:import>
 		</div>
 		
 		

@@ -144,10 +144,9 @@ public class NoticeService implements BoardService{
 	@Override
 	public boolean boardFileDelete(String fileName) throws Exception{
 		
+		fileName = fileName.substring(fileName.lastIndexOf("/"));
 		
-		boolean result = fileManager.fileDelete(upload+board, fileName.substring(fileName.lastIndexOf("/")));
-		
-		return result;
+		return fileManager.fileDelete(upload+board, fileName);
 	}
 	
 }

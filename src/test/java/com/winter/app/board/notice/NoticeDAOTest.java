@@ -21,15 +21,15 @@ class NoticeDAOTest {
 	private NoticeDAO noticeDAO;
 	
 	void listTest(Pager pager)throws Exception{
-		List<BoardVO> result = noticeDAO.list(pager);
-		int testResult = result.size();
-		assertEquals(10, testResult);
+		List<BoardVO> list = noticeDAO.list(null);
+		
+		assertEquals(0, list);
 	}
 	
 	@Test
 	void detailTest()throws Exception{
 		NoticeVO noticeVO = new NoticeVO();
-		noticeVO.setBoardNum(9L);
+		noticeVO.setBoardNum(1L);
 		BoardVO boardVO = noticeDAO.detail(noticeVO);
 		log.info("result : {}", boardVO);
 		
@@ -43,13 +43,11 @@ class NoticeDAOTest {
 	void insertTest()throws Exception {
 		for(int i=0;i<105;i++) {
 		NoticeVO noticeVO = new NoticeVO();
-		noticeVO.setBoardTitle("title"+i);
-		noticeVO.setBoardContents("contents"+i);
-		noticeVO.setBoardWriter("writer"+i);
+		noticeVO.setBoardTitle("titleDelete");
+		noticeVO.setBoardContents("contents");
+		noticeVO.setBoardWriter("writer");
 		int result = noticeDAO.insert(noticeVO);
-		if(i%10==0) {
-			Thread.sleep(500);
-		}
+		
 		//단정문
 		assertEquals(1, result);
 		
