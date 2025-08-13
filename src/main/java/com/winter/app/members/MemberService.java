@@ -1,9 +1,11 @@
 package com.winter.app.members;
 
 import com.winter.app.commons.FileManager;
+import com.winter.app.products.ProductVO;
 import com.winter.app.transaction.Transaction;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,9 +63,21 @@ public class MemberService {
 
 	public MemberVO login(MemberVO memberVO) throws Exception{
 		MemberVO checkVO = memberDAO.login(memberVO);
-		if(checkVO != null && memberVO.getPassword().equals(checkVO)) {
+		System.out.println(memberVO.getPassword());
+		// System.out.println(checkVO);
+		if(checkVO != null && memberVO.getPassword().equals(checkVO.getPassword())) {
 			return checkVO;
 		}
 		return null;
+	}
+
+	public int cartAdd(Map<String, Object> map)throws Exception {
+		// TODO Auto-generated method stub
+		return memberDAO.cartAdd(map);
+	}
+	
+	public List<ProductVO> cartList(MemberVO memberVO) throws Exception{
+		//페이징 처리 해야 함
+		return memberDAO.cartList(memberVO);
 	}
 }

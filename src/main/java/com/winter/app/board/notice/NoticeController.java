@@ -18,8 +18,10 @@ import com.winter.app.board.BoardVO;
 import com.winter.app.board.qna.QnaController;
 import com.winter.app.commons.FileManager;
 import com.winter.app.commons.Pager;
+import com.winter.app.members.MemberVO;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -39,7 +41,7 @@ public class NoticeController {
 	}
 	
 	@GetMapping("list")
-	public String list(Pager pager,Model model)throws Exception{
+	public String list(@ModelAttribute Pager pager,Model model)throws Exception{
 		//
 		
 		List<BoardVO> list = noticeService.list(pager);
@@ -70,8 +72,9 @@ public class NoticeController {
 	}
 	
 	@PostMapping("add")
-	public String insert(NoticeVO noticeVO, MultipartFile[] attaches)throws Exception{
-		
+	public String insert(NoticeVO noticeVO, MultipartFile[] attaches, HttpSession session)throws Exception{
+		MemberVO memberVO = (MemberVO)session.getAttribute("member");
+		noticeVO.setBoardWriter(memberVO.getUsername());
 		int result = noticeService.insert(noticeVO,attaches);
 		return "redirect:./list";
 	}
@@ -148,8 +151,7 @@ public class NoticeController {
 	@ResponseBody
 	public boolean boardFileDelete(String fileName)throws Exception{
 		
-		boolean result = noticeService.boardFileDelete(fileName);
+		return noticeService.boardFileDelete(fileName);
 		
-		return result;
 	}
 }

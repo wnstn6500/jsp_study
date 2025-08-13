@@ -32,7 +32,7 @@
 						<button class="btn btn-danger" data-kind="d">Delete</button>
 						</form>
 						
-						
+						<button class="btn btn-primary cart" data-product-num="${vo.productNum}">장바구니</button>
 				
 				
 					</div>
@@ -45,6 +45,6 @@
 		
 	</div>
 	<c:import url="/WEB-INF/views/include/tale.jsp"></c:import>
-	
+	<script type="text/javascript" src="/js/product/product_detail.js"></script>
 </body>
 </html>

@@ -8,6 +8,6 @@ import lombok.ToString;
 @Getter
 @ToString
 public class RoleVO {
-	private int rolenum;
-	private String rolename;
+	private int roleNum;
+	private String roleName;
 }

@@ -14,7 +14,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.winter.app.board.BoardFileVO;
 import com.winter.app.board.notice.NoticeVO;
 import com.winter.app.commons.Pager;
+import com.winter.app.members.MemberVO;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -70,7 +72,9 @@ public class QnaController {
 	}
 	
 	@PostMapping("add")
-	public String insert(QnaVO qnaVO, MultipartFile [] attaches)throws Exception{
+	public String insert(QnaVO qnaVO, MultipartFile [] attaches,HttpSession session)throws Exception{
+		
+		MemberVO memberVO = (MemberVO)session.getAttribute("member");
 		
 		int result = qnaService.insert(qnaVO, attaches);
 		return "redirect:./list";

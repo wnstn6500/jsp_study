@@ -56,6 +56,21 @@
   		WHERE USERNAME=#{username}
   </select>
   
+  <insert id="cartAdd" parameterType="Map">
+  	INSERT INTO CART VALUES(#{username}, #{productNum})
+  </insert>
+  
+  <select id="cartList" resultType="ProductVO" parameterType="MemberVO">
+  	
+  	SELECT *
+  	FROM PRODUCTS
+  	WHERE PRODUCT_NUM IN (
+	  	SELECT PRODUCT_NUM 
+	  	FROM CART
+	  	WHERE USERNAME =#{username} 	 
+  	)
+  </select>
+  
   </mapper>
   
   
