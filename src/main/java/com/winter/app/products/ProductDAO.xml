@@ -40,7 +40,7 @@
   			
   			<insert id="insert" parameterType="ProductVO">
   				INSERT INTO PRODUCTS
-  				VALUES (NULL, #{productName}, #{productContents}, #{productDate})
+  				VALUES (NULL, #{productName}, #{productContents},#{productDate}, #{productRate}, #{kindNum})
   			</insert>
   
   			<insert id="update" parameterType="ProductVO">
@@ -50,6 +50,13 @@
   					PRODUCT_CONTENTS =#{productContents},
   					PRODUCT_DATE=#{productDate},
   					PRODUCT_RATE=#{productRate},
-  					PRODUCT_KIND=#{productKind}
+  					KIND_NUM=#{kindNum}
+  				WHERE PRODUCT_NUM=#{productNum}	
   			</insert>
+  			
+  			<delete id="delete" parameterType="ProductVO">
+  			DELETE FROM PRODUCTS
+  			WHERE PRODUCT_NUM=#{productNum}
+  			</delete> 
+  			
   </mapper>

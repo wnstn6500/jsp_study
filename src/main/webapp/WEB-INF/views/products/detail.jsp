@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>    
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,7 +11,7 @@
 <body id="page-top">
 	<div id="wrapper">
 		<c:import url="/WEB-INF/views/include/sidebar.jsp"></c:import>
-		
+
 		<!-- Start -->
 		<div id="content-wrapper" class="d-flex flex-column">
 			<div id="content">
@@ -24,25 +24,34 @@
 					<h2>Rate : ${vo.productRate}</h2>
 					<h2>Kind : ${vo.kindNum}</h2>
 					<h2>kindName : ${vo.productKindVO.kindName}</h2>
-				
-				<div>
-				<form action="./delete" method="post">
-							<input type="hidden" name="productNum" value="${productNum.productNum}">
-							<a class="btn btn-success" href="./update?productNum=${vo.productNum}">Update</a>
-						<button class="btn btn-danger" data-kind="d">Delete</button>
+
+					<div>
+						<form action="./delete" method="post" id="frm">
+							<input type="hidden" name="productNum"
+								value="${vo.productNum}"> <a
+								class="btn btn-success"
+								href="./update?productNum=${vo.productNum}">Update</a>
+							<button class="btn btn-danger" data-kind="d">Delete</button>
 						</form>
+
+						<button class="btn btn-primary cart"
+							data-product-num="${vo.productNum}">장바구니</button>
 						
-						<button class="btn btn-primary cart" data-product-num="${vo.productNum}">장바구니</button>
-				
-				
+						<form action="account/add" method="post">
+						<input type="hidden" name="productNum"
+								value="${vo.productNum}">
+						<button class="btn btn-primary" 
+							data-product-num="${vo.productNum}" id="add">상품 구매</button>
+						</form>
+
 					</div>
 				</div>
 			</div>
 			<!-- End Content -->
-			<c:import url="/WEB-INF/views/include/footer.jsp"></c:import>	
+			<c:import url="/WEB-INF/views/include/footer.jsp"></c:import>
 		</div>
-		
-		
+
+
 	</div>
 	<c:import url="/WEB-INF/views/include/tale.jsp"></c:import>
 	<script type="text/javascript" src="/js/product/product_detail.js"></script>

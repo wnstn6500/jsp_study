@@ -40,6 +40,7 @@
 							</tbody>
 						</table>
 						
+						
 						<div>
 							<a href="./add" class="btn btn-outline-success">상품등록</a>
 						</div>

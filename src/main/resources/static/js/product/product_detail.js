@@ -2,6 +2,21 @@
  * 
  */
 const cart = document.querySelector(".cart");
+const product = document.querySelector(".product");
+const frm = document.getElementById("frm");
+const add = document.getElementById("add");
+
+add.addEventListener('click', ()=>{
+	
+	
+	
+	
+	
+	
+	
+})
+
+
 
 cart.addEventListener('click', ()=>{
 	let params = new URLSearchParams();
