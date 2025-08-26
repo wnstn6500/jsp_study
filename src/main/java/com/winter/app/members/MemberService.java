@@ -11,14 +11,18 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 
 @Service
-@Transactional
-public class MemberService {
+@Transactional(rollbackFor = Exception.class)
+public class MemberService implements UserDetailsService{
 	@Autowired
     private final FileManager fileManager;
     @Autowired
@@ -29,6 +33,9 @@ public class MemberService {
 	
 	@Value("${board.member}")
 	private String board;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
     
 	@Autowired
     private Transaction transaction;
@@ -39,6 +46,8 @@ public class MemberService {
 	
 	public int join(MemberVO memberVO, MultipartFile profile)throws Exception{
 		
+		
+		memberVO.setPassword(passwordEncoder.encode(memberVO.getPassword()));
 		int result = memberDAO.join(memberVO);
 		
 		ProfileVO profileVO = new ProfileVO();
@@ -88,5 +97,21 @@ public class MemberService {
 			map.put("list", Arrays.asList(productNum));
 		
 		return memberDAO.cartDelete(map);
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		MemberVO memberVO = new MemberVO();
+		memberVO.setUsername(username);
+		try {
+			memberVO = memberDAO.login(memberVO);
+			return memberVO;
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
+		
+		
+		return null;
 	}
 }

@@ -22,16 +22,19 @@
 					<!-- page contents 내용 -->
 					<h1>Index </h1>
 					<h3>
-						<spring:message code="welcome.message2" text="hi">
-						
-						</spring:message>
+						<spring:message code="welcome.message2" text="hi"/>
 					</h3>
+					<sec:authorize access="isAuthenticated()">
+						<h3>Add Github</h3>
+						
+						</sec:authorize>
 					<c:if test="${not empty member}">
 						<h3>${member.name}</h3>
-					</c:if>
 					<h3>
-						<spring:message code="user.info" arguments="${member.username};${member.email}" argumentSeparator=";" />
+						<spring:message code="user.info" arguments="${member.username},${member.email}" argumentSeparator="," />
 					</h3>
+					<sec:authentication property="principal" var="vo"/>
+					</c:if>
 				</div>
 			</div>
 			<!--  End Content  -->
