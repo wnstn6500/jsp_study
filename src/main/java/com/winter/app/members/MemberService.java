@@ -1,92 +1,85 @@
 package com.winter.app.members;
 
-import com.winter.app.commons.FileManager;
-import com.winter.app.products.ProductVO;
-import com.winter.app.transaction.Transaction;
-
-import java.util.Arrays;
-import java.util.HashMap;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
+import com.winter.app.members.validation.AddGroup;
+import com.winter.app.members.validation.UpdateGroup;
 
-@Service
-@Transactional
-public class MemberService {
-	@Autowired
-    private final FileManager fileManager;
-    @Autowired
-	private MemberDAO memberDAO;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-    @Value("${app.upload}")
-	private String upload;
+@Getter
+@Setter
+@ToString
+public class MemberVO implements UserDetails, OAuth2User {
 	
-	@Value("${board.member}")
-	private String board;
-    
-	@Autowired
-    private Transaction transaction;
+	@NotBlank(message = "ID는 필수", groups = AddGroup.class)
+	private String username;
+	@NotBlank
+	@Size(min =6, max = 8, groups = AddGroup.class)
+	private String password;
 	
-    MemberService(FileManager fileManager) {
-        this.fileManager = fileManager;
-    }
 	
-	public int join(MemberVO memberVO, MultipartFile profile)throws Exception{
+	private String passwordCheck;
+	@NotBlank(groups = {AddGroup.class, UpdateGroup.class})
+	private String name;
+	@Email(groups = {AddGroup.class, UpdateGroup.class})
+	private String email;
+	//@Pattern(regexp = "")
+	private String phone;
+	
+	@NotNull(groups = {AddGroup.class, UpdateGroup.class})
+	@Past(groups = {AddGroup.class, UpdateGroup.class})
+	private LocalDate birth;
+	private boolean accountNonExpired;
+	private boolean accountNonLocked;
+	private boolean credentialsNonExpired;
+	private boolean enabled;
+	
+	private ProfileVO profileVO;
+	
+	private List<RoleVO> roleVOs;
+	
+	//----------------------- Social
+	
+	private Map<String, Object> attributes;
+	
+	private String accessToken;
+	
+	private String sns;
+	
+	
+	
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// TODO Auto-generated method s
+		List<GrantedAuthority> list = new ArrayList<>();
 		
-		int result = memberDAO.join(memberVO);
-		
-		ProfileVO profileVO = new ProfileVO();
-		profileVO.setUsername(memberVO.getUsername());
-		profileVO.setSaveName("default.jpg");
-		profileVO.setOriName("default.jpg");
-		if(profile != null && profile.isEmpty()) {
-			String saveName = fileManager.fileSave(upload+board,profile);
-			
-			profileVO.setSaveName(saveName);
-			profileVO.setOriName(profile.getOriginalFilename());
-			
+		for(RoleVO roleVO:roleVOs) {
+			list.add(new SimpleGrantedAuthority(roleVO.getRoleName()));
 		}
 		
-		result = memberDAO.profileInsert(profileVO);
-		
-		Map<String, Object> map = new HashMap<>();
-		map.put("username", memberVO.getUsername());
-		map.put("roleNum", 3);
-		result = memberDAO.addRole(map);
-		return result;
-	}
-
-	public MemberVO login(MemberVO memberVO) throws Exception{
-		MemberVO checkVO = memberDAO.login(memberVO);
-		System.out.println(memberVO.getPassword());
-		// System.out.println(checkVO);
-		if(checkVO != null && memberVO.getPassword().equals(checkVO.getPassword())) {
-			return checkVO;
-		}
-		return null;
-	}
-
-	public int cartAdd(Map<String, Object> map)throws Exception {
-		// TODO Auto-generated method stub
-		return memberDAO.cartAdd(map);
+		return list;
 	}
 	
-	public List<ProductVO> cartList(MemberVO memberVO) throws Exception{
-		//페이징 처리 해야 함
-		return memberDAO.cartList(memberVO);
-	}
-
-	public int cartDelete(Long[] productNum, MemberVO memberVO) throws Exception {
-			Map<String, Object> map = new HashMap<>();
-			map.put("username", memberVO.getUsername());
-			map.put("list", Arrays.asList(productNum));
-		
-		return memberDAO.cartDelete(map);
-	}
+	
+	
 }

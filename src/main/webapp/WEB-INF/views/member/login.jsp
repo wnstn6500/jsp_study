@@ -44,6 +44,10 @@
 								</div>
 								<button type="submit" class="btn btn-primary">Submit</button>
 							</form>
+							
+							<div>
+								<a class="btn btn-primary" href="/oauth2/authorization/kakao">카카오톡 로그인</a>
+							</div>
 						</div>
 					</div>
 
