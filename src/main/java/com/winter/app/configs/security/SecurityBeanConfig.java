@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class SecurityBeanConfig implements WebMvcConfigurer{
+public class SecurityBeanConfig implements WebMvcConfigurer {
 
 	@Bean
 	PasswordEncoder encoder() {
@@ -26,4 +26,7 @@ public class SecurityBeanConfig implements WebMvcConfigurer{
 			.maxAge(300)
 			;
 	}
+
+	
+	
 }

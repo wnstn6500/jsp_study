@@ -14,33 +14,39 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
-
-	// 로그인이 성공 했을 때 실행
+	
+	//로그인이 성공 했을 때 실행
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
+		// TODO Auto-generated method stub
 		
 		String rememberId = request.getParameter("rememberId");
 		
 		if(rememberId != null && rememberId.equals("1")) {
-			Cookie cookie = new Cookie("rememberId",authentication.getName());
+			Cookie cookie = new Cookie("rememberId", authentication.getName());
 			cookie.setMaxAge(60*60);
 			cookie.setPath("/");
 			response.addCookie(cookie);
-		} else {
+		}else {
 			Cookie [] cookies = request.getCookies();
 			for(Cookie cookie:cookies) {
 				if(cookie.getName().equals("rememberId")) {
 					cookie.setMaxAge(0);
-					cookie.setPath("/");
+					cookie.setPath("/"); 
 					response.addCookie(cookie);
 					break;
 				}
 			}
-
 		}
 		
-		  response.sendRedirect("/");
+		log.info(rememberId);
+		
+		
+		
+		response.sendRedirect("/");
+		
 	}
 
+	
 }

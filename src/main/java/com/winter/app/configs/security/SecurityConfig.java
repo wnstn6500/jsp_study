@@ -7,6 +7,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
+
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.util.AntPathMatcher;
 
 import com.winter.app.members.MemberService;
@@ -31,6 +33,7 @@ public class SecurityConfig {
 	@Autowired
 	private MemberService memberService;
 	
+	//정적자원들을 Security에서 제외
 	@Bean
 	WebSecurityCustomizer customizer() {
 		
@@ -38,8 +41,8 @@ public class SecurityConfig {
 		return web -> {
 			web
 				.ignoring()
-					.requestMatchers("/css/*")
-					.requestMatchers("/js/**","/vendor/**")
+					.requestMatchers("/css/**")
+					.requestMatchers("/js/**", "/vendor/**")
 					.requestMatchers("/files/**")
 					;
 		};
@@ -55,10 +58,10 @@ public class SecurityConfig {
 			//권한에 관련된 설정
 			.authorizeHttpRequests(auth->{
 				auth
-					.requestMatchers("/notice/add", "/notice/update", "/notice/delete").hasRole("ADMIN")
-					.requestMatchers("/products/add","/products/update","/products/delete").hasAnyRole("MANAGER","ADMIN")
-//					.requestMatchers("/member/detail","/member/logout", "/member/update", "/member/delete").access("hasRole('ROLE_MEMBER')" or hasRole('ROLE_MANAGER')")
-					.requestMatchers("/member/detail","/member/logout", "/member/update", "/member/delete").authenticated()
+					.requestMatchers("/notice/add", "/notice/update", "/notice/delete").hasRole("ADMIN") //ROLE_ADMIN
+					.requestMatchers("/products/add", "/products/update", "/products/delete").hasAnyRole("MANAGER", "ADMIN")
+					//.requestMatchers("/member/detail", "/member/logout", "/member/update", "/member/delete").access("hasRole('ROLE_MEMBER') or hasRole('ROLE_MANAGER')")
+					.requestMatchers("/member/detail", "/member/logout", "/member/update", "/member/delete").authenticated()
 					.anyRequest().permitAll()
 					;
 			})
@@ -67,10 +70,10 @@ public class SecurityConfig {
 			.formLogin(form->{
 				form
 					.loginPage("/member/login")
-//					.usernameParameter("id") , username
-//					.passwordParameter("pw") , password
-					//.defaultSuccessUrl("/") // redirect
-					//.successForwardUrl(null) // foward
+					//.usernameParameter("id") , username
+					//.passwordParameter("pw") , password
+					//.defaultSuccessUrl("/")     // redirect
+					//.successForwardUrl(null)  // foward
 					.successHandler(loginSuccessHandler)
 					//.failureUrl("/member/login")
 					.failureHandler(loginFailHandler)
@@ -85,32 +88,44 @@ public class SecurityConfig {
 					.logoutSuccessHandler(addLogoutSuccessHandler)
 					//.logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"));
 					.invalidateHttpSession(true)
-					.deleteCookies("JSESSIONID");
-//					.logoutSuccessUrl("/"); //로그아웃이 성공 했을때 url
+					.deleteCookies("JSESSIONID")
+					//.logoutSuccessUrl("/")
+					
+					;
+				
 			})
 			
 			.rememberMe((remember)->{
 				remember
-						.rememberMeParameter("remember-me")
-						.tokenValiditySeconds(60)
-						.key("rememberkey")
-						.userDetailsService(memberService)
-						.authenticationSuccessHandler(loginSuccessHandler)
-						.useSecureCookie(false)
-						;
+					.rememberMeParameter("remember-me")
+					.tokenValiditySeconds(60)
+					.key("rememberkey")
+					.userDetailsService(memberService)
+					.authenticationSuccessHandler(loginSuccessHandler)
+					.useSecureCookie(false)
+					;
 			})
 			
 			.sessionManagement((s)->{
 				s
-				.maximumSessions(1)
-				.maxSessionsPreventsLogin(true) // false : 이전사용자X true:현재접속사용자X
-				.expiredUrl("/member/login")
+				.invalidSessionUrl("/member/login")
+				.maximumSessions(2)
+				.maxSessionsPreventsLogin(false) //false : 이전사용자X true:현재접속사용자X
+				.expiredUrl("/")
+				
 				;
 			})
+			
+			.oauth2Login((o)->{
+				o.userInfoEndpoint((user)->{
+					user.userService(memberService);
+				});
+			})
+			
 			;
 		
-		return httpSecurity.build();
+		return httpSecurity.build();	
 	}
 	
-	
+
 }

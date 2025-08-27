@@ -8,31 +8,62 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.winter.app.members.validation.AddGroup;
+import com.winter.app.members.validation.UpdateGroup;
 import com.winter.app.products.ProductVO;
 
+
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/member/*")
 public class MemberController {
-
+	
 	@Autowired
 	private MemberService memberService;
-
+	
 	@GetMapping("detail")
 	public void detail()throws Exception{}
 	
-	@GetMapping("logout")
-	public String logout(HttpSession session)throws Exception{
-		session.invalidate();
+
+	
+	@GetMapping("update")
+	public String update(HttpSession session, Model model) {
+		MemberVO memberVO = (MemberVO)session.getAttribute("member");
 		
-		return "redirect:/";
+		model.addAttribute("memberVO", memberVO);
+		return "member/memberUpdate";
+	}
+	
+	@PostMapping("update")
+	public String update(HttpSession session, @Validated(UpdateGroup.class) MemberVO memberVO,BindingResult bindingResult, MultipartFile profile)throws Exception{
+		
+		if(bindingResult.hasErrors()) {
+			return "member/memberUpdate";
+		}
+		
+		MemberVO member = (MemberVO)session.getAttribute("member");
+		
+		memberVO.setUsername(member.getUsername());
+		
+		int result = memberService.update(memberVO);
+		
+		if(result>0) {
+			memberVO.setPassword(member.getPassword());
+			memberVO = memberService.login(memberVO);
+			session.setAttribute("member", memberVO);
+		}
+		
+		return "redirect:./detail";
 	}
 	
 	@GetMapping("login")
@@ -40,31 +71,25 @@ public class MemberController {
 		if(principal != null) {
 			return "redirect:/";
 		}
+		
 		return "member/login";
 	}
 	
-	@PostMapping("login")
-	public String login(MemberVO memberVO, HttpSession session) throws Exception{
-		memberVO = memberService.login(memberVO);
-		
-		if(memberVO != null) {
-			session.setAttribute("member", memberVO);
-			// session.setMaxInactiveInterval(30 * 60);
-		}
-		
-		
-		return "redirect:/";
-	}
-	
+
+
 	@GetMapping("join")
-	public void join() throws Exception{
-		
-		
-	}
+	public void join(MemberVO memberVO) throws Exception{}
 	
 	@PostMapping("join")
-	public String join(MemberVO memberVO, MultipartFile profile)throws Exception{
-		int result = memberService.join(memberVO, profile);
+	public String join(@Validated({AddGroup.class, UpdateGroup.class}) MemberVO memberVO, BindingResult bindingResult,MultipartFile profile) throws Exception{
+		
+		boolean check = memberService.hasMemberError(memberVO, bindingResult);
+		
+		if(check) {
+			return "member/join";
+		}
+		
+		//int result = memberService.join(memberVO, profile);
 		
 		return "redirect:/";
 	}
@@ -72,20 +97,20 @@ public class MemberController {
 	@PostMapping("cartAdd")
 	@ResponseBody
 	public int cartAdd(Long productNum, HttpSession session)throws Exception{
-		MemberVO memberVO = (MemberVO)session.getAttribute("member");
+		MemberVO memberVO =(MemberVO)session.getAttribute("member");
 		Map<String, Object> map = new HashMap<>();
 		map.put("username", memberVO.getUsername());
 		map.put("productNum", productNum);
 		
 		return memberService.cartAdd(map);
+		
 	}
 	
 	@GetMapping("cartList")
 	public void cartList(HttpSession session, Model model)throws Exception{
 		MemberVO memberVO = (MemberVO)session.getAttribute("member");
 		List<ProductVO> list = memberService.cartList(memberVO);
-		model.addAttribute("list",list);
-		
+		model.addAttribute("list", list);
 	}
 	
 	@PostMapping("cartDelete")
@@ -95,5 +120,9 @@ public class MemberController {
 		
 		return "redirect:./cartList";
 	}
+	
+	
+	
+	
 	
 }
