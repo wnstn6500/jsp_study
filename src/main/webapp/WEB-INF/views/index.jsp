@@ -30,7 +30,7 @@
 						<h3>${member.name}</h3>
 					</c:if>
 					<h3>
-						<spring:message code="user.info" arguments="${member.username};${member.email}" argumentSeparator=";" />
+						<spring:message code="user.info" arguments="${member.username},${member.email}" argumentSeparator="," />
 					</h3>
 				</div>
 			</div>
