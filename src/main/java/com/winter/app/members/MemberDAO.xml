@@ -85,7 +85,11 @@
   </delete>
   
   
-  
+  <update id="passwordUpdate" parameterType="MemberVO">
+  	UPDATE MEMBERS 
+  	SET PASSWORD=#{password} 
+  	WHERE USERNAME=#{username}
+  </update>
   
   
   

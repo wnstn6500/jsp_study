@@ -25,10 +25,11 @@
 					<!-- page contents 내용 -->
 					<div class="row justify-content-center ">
 						<div class="col-md-8">
+							<h3>${param.failMessage}</h3>
 							<form method="post">
 								<div class="mb-3">
 									<label for="username" class="form-label">ID</label> 
-									<input type="text" class="form-control" name="username" id="username" aria-describedby="usernameHelp">
+									<input type="text" value="${cookie.rememberId.value}" class="form-control" name="username" id="username" aria-describedby="usernameHelp">
 									<div id="emailHelp" class="form-text">We'll never share
 										your email with anyone else.</div>
 								</div>
@@ -39,8 +40,13 @@
 								</div>
 								<div class="mb-3 form-check">
 									<input type="checkbox" class="form-check-input"
-										id="exampleCheck1"> <label class="form-check-label"
-										for="exampleCheck1">Check me out</label>
+										id="exampleCheck1" value="1" name="rememberId"> <label class="form-check-label"
+										for="exampleCheck1">ID 기억하기</label>
+								</div>
+								<div class="mb-3 form-check">
+									<input type="checkbox" class="form-check-input"
+										id="exampleCheck1" value="1" name="remember-me"> <label class="form-check-label"
+										for="exampleCheck1">자동로그인</label>
 								</div>
 								<button type="submit" class="btn btn-primary">Submit</button>
 							</form>

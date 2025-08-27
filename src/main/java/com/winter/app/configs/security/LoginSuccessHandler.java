@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
-
 	
 	//로그인이 성공 했을 때 실행
 	@Override

@@ -1,5 +1,10 @@
 package com.winter.app.configs.security;
 
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.stereotype.Component;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,13 +18,25 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import com.winter.app.members.MemberVO;
 
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+
 import reactor.core.publisher.Mono;
+
 @Component
 @Slf4j
 public class AddLogoutHandler implements LogoutHandler {
+
+
+	@Override
+	public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+		log.info("logout handler");
+		log.info("{}", authentication);
+	}
+
+}
 
 	@Value("${spring.security.oauth2.client.registration.kakao.client-id}")
 	private String restKey;
@@ -71,3 +88,4 @@ public class AddLogoutHandler implements LogoutHandler {
 	}
 
 }
+

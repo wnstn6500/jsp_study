@@ -3,6 +3,9 @@ package com.winter.app.configs.security;
 import java.io.IOException;
 import java.net.URLEncoder;
 
+
+import org.springframework.security.access.event.AuthenticationCredentialsNotFoundEvent;
+
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -51,13 +54,33 @@ public class LoginFailHandler implements AuthenticationFailureHandler {
 		if(exception instanceof LockedException) {
 			message="사용자 계정이 잠겨 있습니다";
 		}
-	
+
 		if(exception instanceof CredentialsExpiredException) {
 			message="자격 증명 유효 기간이 만료";
 		}
 		
 		if(exception instanceof InternalAuthenticationServiceException) {
 			message="ID 틀림";
+
+		}
+		
+		if(exception instanceof AuthenticationCredentialsNotFoundException) {
+			message="유효하지 않은 사용자";
+		}
+		
+		
+		else {
+			message="ID가 틀림";
+		}
+		
+		message = URLEncoder.encode(message,"UTF-8");
+		
+		response.sendRedirect("./login?failMessage="+message);
+		
+	}
+
+}
+
 		}			
 		
 		if(exception instanceof AuthenticationCredentialsNotFoundException) {
