@@ -26,7 +26,6 @@ public class SecurityBeanConfig implements WebMvcConfigurer {
 			.maxAge(300)
 			;
 	}
-
 	
 	
 }

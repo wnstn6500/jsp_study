@@ -47,12 +47,12 @@
 									<input type="checkbox" class="form-check-input"
 										id="exampleCheck1" value="1" name="remember-me"> <label class="form-check-label"
 										for="exampleCheck1">자동로그인</label>
-								</div>
+								</div>								
 								<button type="submit" class="btn btn-primary">Submit</button>
 							</form>
 							
 							<div>
-								<a class="btn btn-primary" href="/oauth2/authorization/kakao">카카오톡 로그인</a>
+								<a class="btn btn-primary" href="/oauth2/authorization/kakao">카카오로그인</a>
 							</div>
 						</div>
 					</div>
